@@ -16,10 +16,17 @@ def gaussian_blur(img, kernel_size, sigma):
     return blurred_img
 
 def high_boost_filter(img, kernel_size, sigma, alpha):
-    blurred_img = gaussian_blur(img, kernel_size, sigma)
-    mask = img - blurred_img
-    high_boosted_img = img + alpha * mask
-    return high_boosted_img
+    # 이미지를 float 타입으로 변환
+    img_float = img.astype(np.float32)
+    
+    blurred_img = gaussian_blur(img_float, kernel_size, sigma)
+    mask = img_float - blurred_img
+    high_boosted_img = img_float + alpha * mask
+    
+    # 결과 이미지를 0과 255 사이로 클리핑
+    high_boosted_img_clipped = np.clip(high_boosted_img, 0, 255).astype('uint8')
+    
+    return high_boosted_img_clipped
 
 # 이미지 로드 및 그레이스케일 변환
 #img = np.array(Image.open('resource\\HW3 Image Samples\\HW3 Image Samples\\High-boost Filtering\\Fig0327(a)(tungsten_original).jpg').convert('L'))
