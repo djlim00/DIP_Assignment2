@@ -25,42 +25,23 @@ def gaussian_filter(img, kernel_size, sigma):
     gauss_img = convolve2d(img, kernel, mode='same', boundary='fill', fillvalue=0)
     return gauss_img
 
-def median_filter_color(img, kernel_size):
-    # 채널별로 median 필터 적용
-    median_img = np.zeros_like(img)
-    for c in range(3):  # RGB 채널
-        median_img[:, :, c] = median_filter(img[:, :, c], kernel_size)
-    return median_img
 
-def gaussian_filter_color(img, kernel_size, sigma):
-    # 채널별로 Gaussian 필터 적용
-    gauss_img = np.zeros_like(img)
-    for c in range(3):  # RGB 채널
-        gauss_img[:, :, c] = gaussian_filter(img[:, :, c], kernel_size, sigma)
-    return gauss_img
+img = np.array(Image.open('resource\\HW3 Image Samples\\HW3 Image Samples\\Noise Filtering\\Fig0503 (original_pattern).jpg').convert('L'))
+#img = np.array(Image.open('resource\\HW3 Image Samples\\HW3 Image Samples\\Noise Filtering\\Fig0504(a)(gaussian-noise).jpg').convert('L'))
+#img = np.array(Image.open('resource\\HW3 Image Samples\\HW3 Image Samples\\Noise Filtering\\Fig0504(i)(salt-pepper-noise).jpg').convert('L'))
 
-# 이미지 로드 부분 수정 (convert('L') 제거하여 컬러 이미지로 로드)
-img = np.array(Image.open('resource\HW3 Image Samples\HW3 Image Samples\Noise Filtering\Fig0503 (original_pattern).jpg').convert('L'))
-#img = np.array(Image.open('resource\HW3 Image Samples\HW3 Image Samples\Noise Filtering\Fig0504(a)(gaussian-noise).jpg').convert('L'))
-#img = np.array(Image.open('resource\HW3 Image Samples\HW3 Image Samples\Noise Filtering\Fig0504(i)(salt-pepper-noise).jpg').convert('L'))
+median_img = median_filter(img, 5)
+gauss_img = gaussian_filter(img, 5, 10)
 
-# 컬러 이미지인 경우 필터링
-if len(img.shape) == 3:  # 컬러 이미지 확인
-    median_img = median_filter_color(img, 5)  # Kernel size = 5
-    gauss_img = gaussian_filter_color(img, 5, 10)  # Kernel size = 5, Sigma = 10
-else:  # 흑백 이미지인 경우 (기존 코드 사용)
-    median_img = median_filter(img, 5)
-    gauss_img = gaussian_filter(img, 5, 10)
 
-# 결과 출력 부분의 cmap 옵션 제거하여 컬러 이미지로 출력
 plt.figure(figsize=(15, 5))
 plt.subplot(1, 3, 1)
 plt.title("Original Image")
-plt.imshow(img)  # 컬러 이미지로 출력
+plt.imshow(img, cmap='gray')  
 plt.subplot(1, 3, 2)
 plt.title("Median Filter")
-plt.imshow(median_img)  # 컬러 이미지로 출력
+plt.imshow(median_img, cmap='gray') 
 plt.subplot(1, 3, 3)
 plt.title("Gaussian Filter")
-plt.imshow(gauss_img)  # 컬러 이미지로 출력
+plt.imshow(gauss_img, cmap='gray')  
 plt.show()
